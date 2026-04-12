@@ -68,5 +68,5 @@ public:
 	u8 get_reg_by_index(u8 index);
 	void set_reg_by_index(u8 index, u8 value);
 	void handle_interrupt();
-	void step();
+	u8 step();
 };

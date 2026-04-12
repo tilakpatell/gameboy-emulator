@@ -5,5 +5,4 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(gameboy
 	main.cpp
-	cpu.cpp
-)
+	cpu.cpp)

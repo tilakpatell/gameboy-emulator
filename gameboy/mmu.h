@@ -22,8 +22,17 @@ public:
 		return memory[address];
 	}
 
+	void write_direct(u16 address, u8 value) {
+		memory[address] = value;
+	}
+
 	void write(u16 address, u8 value) {
 		if (address < 0x8000) {
+			return;
+		}
+
+		if (address == 0xFF04) {
+			memory[address] = 0;
 			return;
 		}
 
