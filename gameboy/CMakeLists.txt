@@ -1,12 +1,9 @@
-﻿# CMakeList.txt : CMake project for gameboy, include source and define
-# project specific logic here.
-#
+﻿cmake_minimum_required(VERSION 3.12)
+project(gameboy)
 
-# Add source to this project's executable.
-add_executable (gameboy "gameboy.cpp" "gameboy.h" "cpu.h" "types.h" "mmu.h" "cartridge.h")
+set(CMAKE_CXX_STANDARD 20)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET gameboy PROPERTY CXX_STANDARD 20)
-endif()
-
-# TODO: Add tests and install targets if needed.
+add_executable(gameboy
+	main.cpp
+	cpu.cpp
+)
