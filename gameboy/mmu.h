@@ -3,14 +3,19 @@
 #include <array>
 #include <vector>
 #include "types.h"
+#include "joypad.h"
+
+class Joypad;
 
 class MMU {
 private:
 	std::array<u8, 0x10000> memory;
-
+	Joypad& joypad;	
 public:
-	MMU() {
+	MMU(Joypad& jp) : joypad(jp) {
 		memory.fill(0);
+		memory[0xFF40] = 0x91;  // LCDC post-boot value
+		memory[0xFF47] = 0xFC;
 	}
 
 	void load_rom(const std::vector<u8>& rom_data) {
@@ -19,6 +24,11 @@ public:
 	}
 
 	u8 read(u16 address) {
+
+		if (address == 0xFF00) {
+			return joypad.read();
+		}
+
 		return memory[address];
 	}
 
@@ -31,8 +41,18 @@ public:
 			return;
 		}
 
+		if (address == 0xFF44) {
+			memory[0xFF44] = 0;  // game writing to LY resets it
+			return;
+		}
+
 		if (address == 0xFF04) {
 			memory[address] = 0;
+			return;
+		}
+
+		if (address == 0xFF00) {
+			joypad.write(value);
 			return;
 		}
 

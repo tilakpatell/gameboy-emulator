@@ -1,7 +1,9 @@
 #include "gameboy.h"
+#include "sdl.h"
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 int main(int argc, char* argv[]) {
 	if (argc < 2) {
@@ -21,9 +23,19 @@ int main(int argc, char* argv[]) {
 	file.read(reinterpret_cast<char*>(rom_data.data()), size);
 	file.close();
 
-	Gameboy gb;
-	gb.load_rom(rom_data);
-	gb.run();
+
+	auto gb = std::make_unique<Gameboy>();
+	Renderer renderer;
+	renderer.init();
+	gb->load_rom(rom_data);
+	while (renderer.is_running()) {
+		gb->run_frame();
+		renderer.draw_frame(gb->get_framebuffer());
+		Joypad& joypad = gb->get_joypad();
+		renderer.poll_events(joypad);
+	}
+
+	renderer.cleanup();
 
 	return 0;
 }
