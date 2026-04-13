@@ -1,6 +1,6 @@
-# gameboy
+# GameBoy Emulator in C++20
 
-A Game Boy (DMG) emulator written in C++20.
+A GameBoy (DMG) emulator written in C++20.
 
 ![C++20](https://img.shields.io/badge/C%2B%2B-20-blue) ![SDL3](https://img.shields.io/badge/SDL-3-green)
 
@@ -74,16 +74,16 @@ Example:
 ## Architecture
 
 ```
-main.cpp          Entry point, frame loop, ROM loading
-gameboy.h         Top-level class wiring components together
-cpu.h / cpu.cpp   SM83 CPU — registers, instruction decoding, interrupts
-mmu.h             Memory map, boot ROM overlay, I/O registers, OAM DMA
-ppu.h             Pixel Processing Unit — scanline renderer, sprites, STAT
-timer.h           DIV/TIMA timer with configurable frequency
-joypad.h          Button state and select-line multiplexing
-sdl.h             SDL3 renderer and input polling
-types.h           Type aliases (u8, u16, i8, etc.)
-cartridge.h       Cartridge header parsing and MBC mappers (WIP)
+main.cpp                Entry point, frame loop, ROM loading
+gameboy.h / gameboy.cpp  Top-level class wiring components together
+cpu.h / cpu.cpp          SM83 CPU — registers, instruction decoding, interrupts
+mmu.h / mmu.cpp          Memory map, boot ROM overlay, I/O registers, OAM DMA
+ppu.h / ppu.cpp          Pixel Processing Unit — scanline renderer, sprites, STAT
+timer.h / timer.cpp      DIV/TIMA timer with configurable frequency
+joypad.h / joypad.cpp    Button state and select-line multiplexing
+sdl.h / sdl.cpp          SDL3 renderer and input polling
+types.h                  Type aliases (u8, u16, i8, etc.)
+cartridge.h              Cartridge header parsing and MBC mappers (WIP)
 ```
 
 ## Compatibility
