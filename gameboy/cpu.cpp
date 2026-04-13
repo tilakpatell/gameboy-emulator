@@ -186,7 +186,7 @@ u8 CPU::step() {
 	}
 
 			 // 0x10 - 0x1F
-	case 0x10: halted = true; return 4;
+	case 0x10: fetch_byte(); halted = true; return 4;
 	case 0x11: regs.de = fetch_word(); return 12;
 	case 0x12: mmu.write(regs.de, regs.get_a()); return 8;
 	case 0x13: regs.de++; return 8;

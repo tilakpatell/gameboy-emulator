@@ -14,10 +14,10 @@ enum class Button {
 };
 
 class Joypad {
-	private:
-		u8 actions = 0; // All buttons released (active low)
-		u8 directions = 0; // D-pad bits (right, left, up, down)
-		u8 select = 0; // Button select bits (A, B, Select, Start)
+private:
+	u8 actions = 0;
+	u8 directions = 0;
+	u8 select = 0;
 public:
 	void write(u8 value) {
 		select = value & 0x30;
@@ -36,13 +36,17 @@ public:
 		return (result & 0x0F) | select;
 	}
 
-	void press(int button) {
+	bool press(int button) {
+		bool was_pressed;
 		if (button < 4) {
-			directions |= (1 << button);   // button 0 sets bit 0, button 3 sets bit 3
+			was_pressed = directions & (1 << button);
+			directions |= (1 << button);
 		}
 		else {
-			actions |= (1 << (button - 4)); // button 4 sets bit 0, button 7 sets bit 3
+			was_pressed = actions & (1 << (button - 4));
+			actions |= (1 << (button - 4));
 		}
+		return !was_pressed; 
 	}
 
 	void release(int button) {

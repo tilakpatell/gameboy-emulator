@@ -56,6 +56,15 @@ public:
 			return;
 		}
 
+		if (address == 0xFF46) {
+			u16 source = value << 8;
+			for (u16 i = 0; i < 0xA0; i++) {
+				memory[0xFE00 + i] = memory[source + i];
+			}
+			memory[address] = value;
+			return;
+		}
+
 		memory[address] = value;
 
 		if (address == 0xFF02 && value == 0x81) {

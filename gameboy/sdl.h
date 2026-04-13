@@ -60,26 +60,26 @@ public:
 			}
 			if (event.type == SDL_EVENT_KEY_DOWN) {
 				switch (event.key.key) {
-				case SDLK_RIGHT:     joypad.press(0); break;
-				case SDLK_LEFT:      joypad.press(1); break;
-				case SDLK_UP:        joypad.press(2); break;
-				case SDLK_DOWN:      joypad.press(3); break;
-				case SDLK_Z:         joypad.press(4); break;
-				case SDLK_X:         joypad.press(5); break;
-				case SDLK_BACKSPACE: joypad.press(6); break;
-				case SDLK_RETURN:    joypad.press(7); break;
+				case SDLK_RIGHT: case SDLK_D: joypad.press(0); break;
+				case SDLK_LEFT:  case SDLK_A: joypad.press(1); break;
+				case SDLK_UP:    case SDLK_W: joypad.press(2); break;
+				case SDLK_DOWN:  case SDLK_S: joypad.press(3); break;
+				case SDLK_Z:     case SDLK_J: joypad.press(4); break;
+				case SDLK_X:     case SDLK_K: joypad.press(5); break;
+				case SDLK_BACKSPACE:           joypad.press(6); break;
+				case SDLK_RETURN:              joypad.press(7); break;
 				}
 			}
 			if (event.type == SDL_EVENT_KEY_UP) {
 				switch (event.key.key) {
-				case SDLK_RIGHT:     joypad.release(0); break;
-				case SDLK_LEFT:      joypad.release(1); break;
-				case SDLK_UP:        joypad.release(2); break;
-				case SDLK_DOWN:      joypad.release(3); break;
-				case SDLK_Z:         joypad.release(4); break;
-				case SDLK_X:         joypad.release(5); break;
-				case SDLK_BACKSPACE: joypad.release(6); break;
-				case SDLK_RETURN:    joypad.release(7); break;
+				case SDLK_RIGHT: case SDLK_D: joypad.release(0); break;
+				case SDLK_LEFT:  case SDLK_A: joypad.release(1); break;
+				case SDLK_UP:    case SDLK_W: joypad.release(2); break;
+				case SDLK_DOWN:  case SDLK_S: joypad.release(3); break;
+				case SDLK_Z:     case SDLK_J: joypad.release(4); break;
+				case SDLK_X:     case SDLK_K: joypad.release(5); break;
+				case SDLK_BACKSPACE:           joypad.release(6); break;
+				case SDLK_RETURN:              joypad.release(7); break;
 				}
 			}
 		}
