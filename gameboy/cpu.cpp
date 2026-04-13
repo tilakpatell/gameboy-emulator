@@ -1,13 +1,24 @@
 #include "cpu.h"
 #include "mmu.h"
 
-CPU::CPU(MMU& mmu) : mmu(mmu), ime(false), ime_pending(false), halted(false) {
+CPU::CPU(MMU& mmu) : mmu(mmu), ime(false), ime_pending(false), halted(false), halt_bug(false) {
+	// Post-boot register state (DMG): used when no boot ROM
 	regs.af = 0x01B0;
 	regs.bc = 0x0013;
 	regs.de = 0x00D8;
 	regs.hl = 0x014D;
 	regs.sp = 0xFFFE;
 	regs.pc = 0x0100;
+}
+
+void CPU::init_boot_rom() {
+	// When running boot ROM, CPU starts from scratch
+	regs.af = 0x0000;
+	regs.bc = 0x0000;
+	regs.de = 0x0000;
+	regs.hl = 0x0000;
+	regs.sp = 0x0000;
+	regs.pc = 0x0000;
 }
 
 bool CPU::get_flag(Flag flag) const {
@@ -25,7 +36,13 @@ void CPU::set_flag(Flag flag, bool value) {
 
 u8 CPU::fetch_byte() {
 	u8 byte = mmu.read(regs.pc);
-	regs.pc++;
+	if (halt_bug) {
+		// HALT bug: read the byte but don't increment PC
+		halt_bug = false;
+	}
+	else {
+		regs.pc++;
+	}
 	return byte;
 }
 
@@ -453,7 +470,18 @@ u8 CPU::step() {
 	case 0x73: mmu.write(regs.hl, regs.get_e()); return 8;
 	case 0x74: mmu.write(regs.hl, regs.get_h()); return 8;
 	case 0x75: mmu.write(regs.hl, regs.get_l()); return 8;
-	case 0x76: halted = true; return 4;
+	case 0x76: {
+		u8 ie = mmu.read(0xFFFF);
+		u8 if_reg = mmu.read(0xFF0F);
+		if (!ime && (ie & if_reg & 0x1F)) {
+			// HALT bug: CPU doesn't halt, next opcode byte is read twice
+			halt_bug = true;
+		}
+		else {
+			halted = true;
+		}
+		return 4;
+	}
 	case 0x77: mmu.write(regs.hl, regs.get_a()); return 8;
 	case 0x78: regs.set_a(regs.get_b()); return 4;
 	case 0x79: regs.set_a(regs.get_c()); return 4;

@@ -9,7 +9,7 @@
 
 int main(int argc, char* argv[]) {
 	if (argc < 2) {
-		std::cerr << "Usage: gameboy <rom_file>" << std::endl;
+		std::cerr << "Usage: gameboy <rom_file> [boot_rom]" << std::endl;
 		return 1;
 	}
 
@@ -27,6 +27,24 @@ int main(int argc, char* argv[]) {
 
 
 	auto gb = std::make_unique<Gameboy>();
+
+	// Load boot ROM if provided as second argument
+	if (argc >= 3) {
+		std::ifstream boot_file(argv[2], std::ios::binary | std::ios::ate);
+		if (!boot_file.is_open()) {
+			std::cerr << "Failed to open boot ROM: " << argv[2] << std::endl;
+			return 1;
+		}
+		auto boot_size = boot_file.tellg();
+		boot_file.seekg(0, std::ios::beg);
+		std::vector<u8> boot_data(boot_size);
+		boot_file.read(reinterpret_cast<char*>(boot_data.data()), boot_size);
+		boot_file.close();
+
+		gb->load_boot_rom(boot_data);
+		std::cout << "Boot ROM loaded (" << boot_size << " bytes)" << std::endl;
+	}
+
 	Renderer renderer;
 	renderer.init();
 	gb->load_rom(rom_data);

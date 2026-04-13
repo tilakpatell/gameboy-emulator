@@ -53,9 +53,11 @@ private:
 	bool ime;
 	bool ime_pending;
 	bool halted;
+	bool halt_bug;  // HALT bug: skip next PC increment
 
 public:
 	CPU(MMU& mmu);
+	void init_boot_rom();  // call when boot ROM is present
 
 	bool get_flag(Flag flag) const;
 	void set_flag(Flag flag, bool value);
